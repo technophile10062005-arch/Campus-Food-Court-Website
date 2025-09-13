@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Advanced Textarea Validation</title>
+  <p style="color: red;font-size: 16px;font-weight: bold;">
+    Hi I am RED, 16px, and bold.
+  </p>
+  <style>
+    body {
+      font-family: Segoe UI, Arial, sans-serif;
+      margin: 40px;
+    }
+    label {
+      font-weight: 600;
+      margin-bottom: 10px;
+      display: block;
+    }
+    textarea {
+      width: 400px;
+      height: 120px;
+      font-size: 1.1em;
+      padding: 10px;
+    }
+    #result {
+      margin-top: 18px;
+      padding: 15px;
+      border-radius: 6px;
+      display: inline-block;
+    }
+    .valid {
+      color: #155724;
+      background-color: #d4edda;
+      border: 1px solid #c3e6cb;
+    }
+    .invalid {
+      color: #721c24;
+      background-color: #f8d7da;
+      border: 1px solid #f5c6cb;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>Advanced Automation Validator</h2>
+  <form>
+    <label for="dfaInput">Enter a string (Σ = {a, b}):</label>
+    <textarea id="dfaInput" placeholder="Type a combination of 'a' and 'b'"></textarea>
+  </form>
+  <div id="result"></div>
+
+  <script>
+    // Check if the string ends with 'aa'
+    function validateEndsWithAA(str) {
+      return typeof str === "string" && str.endsWith("aa");
+    }
+
+    var textarea = document.getElementById('dfaInput');
+    var resultDiv = document.getElementById('result');
+
+    textarea.addEventListener('input', function () {
+      var val = textarea.value.trim();
+      if(val.length === 0){
+        resultDiv.textContent = '';
+        resultDiv.className = '';
+        return;
+      }
+      // Validation
+      if (/^[ab]+$/.test(val)) { // Only {a, b} allowed
+        if (validateEndsWithAA(val)) {
+          resultDiv.textContent = "✔️ Valid: The string ends with 'aa'.";
+          resultDiv.className = "valid";
+        } else {
+          resultDiv.textContent = "❌ Invalid: The string does NOT end with 'aa'.";
+          resultDiv.className = "invalid";
+        }
+      } else {
+        resultDiv.textContent = "❌ Invalid input: Use only 'a' and 'b'.";
+        resultDiv.className = "invalid";
+      }
+    });
+  </script>
+
+</body>
+</html>
