@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Campus Food Court - Order Online</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+    <!-- Loading Spinner -->
+    <div id="loading" class="loading-overlay">
+        <div class="loading-spinner">
+            <i class="fas fa-utensils"></i>
+            <p>Loading...</p>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-utensils"></i>
+                    <span>Campus Food Court</span>
+                </div>
+                <div class="user-info" id="userInfo" style="display: none;">
+                    <span id="userName"></span>
+                    <button id="logoutBtn" class="btn-icon">
+                        <i class="fas fa-sign-out-alt"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main id="mainContent">
+        
+        <!-- Login/Signup Screen -->
+        <section id="authScreen" class="screen active">
+            <div class="container">
+                <div class="auth-container">
+                    <div class="auth-header">
+                        <h1>Welcome to Campus Food Court</h1>
+                        <p>Order delicious food from your favorite campus restaurants</p>
+                    </div>
+
+                    <!-- Login Form -->
+                    <div id="loginForm" class="auth-form active">
+                        <h2>Login</h2>
+                        <form id="loginFormElement">
+                            <div class="form-group">
+                                <label for="loginUsername">Username</label>
+                                <input type="text" id="loginUsername" name="username" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="loginPassword">Password</label>
+                                <input type="password" id="loginPassword" name="password" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="loginRole">Login as</label>
+                                <select id="loginRole" name="role" required>
+                                    <option value="student">Student</option>
+                                    <option value="admin">Admin</option>
+                                </select>
+                            </div>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-sign-in-alt"></i> Login
+                            </button>
+                        </form>
+                        <p class="auth-switch">
+                            Don't have an account? 
+                            <a href="#" id="showSignup">Sign up here</a>
+                        </p>
+                    </div>
+
+                    <!-- Signup Form -->
+                    <div id="signupForm" class="auth-form">
+                        <h2>Sign Up</h2>
+                        <form id="signupFormElement">
+                            <div class="form-group">
+                                <label for="signupName">Full Name</label>
+                                <input type="text" id="signupName" name="name" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="signupUsername">Username</label>
+                                <input type="text" id="signupUsername" name="username" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="signupEmail">Email</label>
+                                <input type="email" id="signupEmail" name="email" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="signupPassword">Password</label>
+                                <input type="password" id="signupPassword" name="password" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="signupRole">Account Type</label>
+                                <select id="signupRole" name="role" required>
+                                    <option value="student">Student</option>
+                                    <option value="admin">Admin</option>
+                                </select>
+                            </div>
+                            <div class="form-group" id="studentIdGroup">
+                                <label for="signupStudentId">Student ID</label>
+                                <input type="text" id="signupStudentId" name="student_id">
+                            </div>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-user-plus"></i> Sign Up
+                            </button>
+                        </form>
+                        <p class="auth-switch">
+                            Already have an account? 
+                            <a href="#" id="showLogin">Login here</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Student Dashboard -->
+        <section id="studentDashboard" class="screen">
+            <div class="container">
+                <!-- Store Selection -->
+                <div class="store-selector">
+                    <h2>Select Food Court</h2>
+                    <div class="store-cards" id="storeCards">
+                        <!-- Store cards will be populated by JavaScript -->
+                    </div>
+                </div>
+
+                <!-- Menu Categories -->
+                <div class="menu-section" id="menuSection" style="display: none;">
+                    <div class="menu-header">
+                        <h2 id="selectedStoreName">Food Menu</h2>
+                        <button id="changeStore" class="btn btn-outline">
+                            <i class="fas fa-exchange-alt"></i> Change Store
+                        </button>
+                    </div>
+                    
+                    <!-- Category Filter -->
+                    <div class="category-filter">
+                        <button class="category-btn active" data-category="all">All Items</button>
+                        <button class="category-btn" data-category="Main Dish">Main Dish</button>
+                        <button class="category-btn" data-category="Side Dish">Side Dish</button>
+                        <button class="category-btn" data-category="Snack">Snacks</button>
+                        <button class="category-btn" data-category="Beverages">Beverages</button>
+                        <button class="category-btn" data-category="Sweets">Sweets</button>
+                    </div>
+
+                    <!-- Menu Items -->
+                    <div class="menu-grid" id="menuGrid">
+                        <!-- Menu items will be populated by JavaScript -->
+                    </div>
+                </div>
+
+                <!-- Cart -->
+                <div class="cart-sidebar" id="cartSidebar">
+                    <div class="cart-header">
+                        <h3>Your Order</h3>
+                        <button id="closeCart" class="btn-icon">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                    <div class="cart-items" id="cartItems">
+                        <!-- Cart items will be populated by JavaScript -->
+                    </div>
+                    <div class="cart-footer">
+                        <div class="cart-total">
+                            <strong>Total: ₹<span id="cartTotal">0</span></strong>
+                        </div>
+                        <button id="checkoutBtn" class="btn btn-primary" disabled>
+                            <i class="fas fa-credit-card"></i> Proceed to Payment
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Floating Cart Button -->
+                <button id="cartToggle" class="cart-toggle" style="display: none;">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span id="cartCount">0</span>
+                </button>
+            </div>
+        </section>
+
+        <!-- Admin Dashboard -->
+        <section id="adminDashboard" class="screen">
+            <div class="container">
+                <div class="admin-header">
+                    <h2>Admin Dashboard</h2>
+                    <div class="admin-nav">
+                        <button class="admin-tab active" data-tab="orders">Orders</button>
+                        <button class="admin-tab" data-tab="menu">Menu Management</button>
+                        <button class="admin-tab" data-tab="stores">Store Management</button>
+                    </div>
+                </div>
+
+                <!-- Orders Management -->
+                <div id="ordersTab" class="admin-content active">
+                    <div class="orders-header">
+                        <h3>Incoming Orders</h3>
+                        <button id="refreshOrders" class="btn btn-outline">
+                            <i class="fas fa-sync-alt"></i> Refresh
+                        </button>
+                    </div>
+                    <div class="orders-grid" id="ordersGrid">
+                        <!-- Orders will be populated by JavaScript -->
+                    </div>
+                </div>
+
+                <!-- Menu Management -->
+                <div id="menuTab" class="admin-content">
+                    <div class="menu-management-header">
+                        <h3>Menu Management</h3>
+                        <button id="addMenuItem" class="btn btn-primary">
+                            <i class="fas fa-plus"></i> Add Item
+                        </button>
+                    </div>
+                    <div class="menu-items-table" id="menuItemsTable">
+                        <!-- Menu items table will be populated by JavaScript -->
+                    </div>
+                </div>
+
+                <!-- Store Management -->
+                <div id="storesTab" class="admin-content">
+                    <div class="store-management-header">
+                        <h3>Store & Item Availability</h3>
+                    </div>
+                    <div class="store-availability" id="storeAvailability">
+                        <!-- Store availability will be populated by JavaScript -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Payment Screen -->
+        <section id="paymentScreen" class="screen">
+            <div class="container">
+                <div class="payment-container">
+                    <div class="payment-header">
+                        <button id="backToCart" class="btn-icon">
+                            <i class="fas fa-arrow-left"></i>
+                        </button>
+                        <h2>Payment</h2>
+                    </div>
+
+                    <div class="order-summary">
+                        <h3>Order Summary</h3>
+                        <div id="paymentOrderItems">
+                            <!-- Order items will be populated -->
+                        </div>
+                        <div class="payment-total">
+                            <strong>Total Amount: ₹<span id="paymentTotal">0</span></strong>
+                        </div>
+                    </div>
+
+                    <div class="payment-methods">
+                        <h3>Payment Method</h3>
+                        <div class="payment-options">
+                            <label class="payment-option">
+                                <input type="radio" name="payment" value="card" checked>
+                                <span class="payment-icon"><i class="fas fa-credit-card"></i></span>
+                                <span>Credit/Debit Card</span>
+                            </label>
+                            <label class="payment-option">
+                                <input type="radio" name="payment" value="upi">
+                                <span class="payment-icon"><i class="fas fa-mobile-alt"></i></span>
+                                <span>UPI</span>
+                            </label>
+                            <label class="payment-option">
+                                <input type="radio" name="payment" value="wallet">
+                                <span class="payment-icon"><i class="fas fa-wallet"></i></span>
+                                <span>Digital Wallet</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <button id="simulatePayment" class="btn btn-primary btn-large">
+                        <i class="fas fa-lock"></i> Simulate Payment (₹<span id="finalAmount">0</span>)
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Order Success Screen -->
+        <section id="successScreen" class="screen">
+            <div class="container">
+                <div class="success-container">
+                    <div class="success-icon">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <h2>Order Placed Successfully!</h2>
+                    
+                    <div class="order-details">
+                        <div class="order-token">
+                            <h3>Your Order Token</h3>
+                            <div class="token-display" id="orderToken">
+                                <!-- Token will be populated -->
+                            </div>
+                        </div>
+                        
+                        <div class="order-info">
+                            <p><strong>Order Number:</strong> <span id="orderNumber"></span></p>
+                            <p><strong>Student Name:</strong> <span id="orderStudentName"></span></p>
+                            <p><strong>Total Amount:</strong> ₹<span id="orderAmount"></span></p>
+                            <p><strong>Store:</strong> <span id="orderStore"></span></p>
+                        </div>
+
+                        <div class="order-items-summary" id="orderItemsSummary">
+                            <!-- Order items will be populated -->
+                        </div>
+                    </div>
+
+                    <div class="success-actions">
+                        <button id="newOrder" class="btn btn-primary">
+                            <i class="fas fa-plus"></i> Place New Order
+                        </button>
+                        <button id="viewOrders" class="btn btn-outline">
+                            <i class="fas fa-history"></i> View Order History
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Modals -->
+    <div id="modalOverlay" class="modal-overlay">
+        <div class="modal" id="addItemModal">
+            <div class="modal-header">
+                <h3 id="modalTitle">Add Menu Item</h3>
+                <button id="closeModal" class="btn-icon">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-content">
+                <form id="menuItemForm">
+                    <input type="hidden" id="editItemId">
+                    <div class="form-group">
+                        <label for="itemName">Item Name</label>
+                        <input type="text" id="itemName" name="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="itemCategory">Category</label>
+                        <select id="itemCategory" name="category" required>
+                            <option value="Main Dish">Main Dish</option>
+                            <option value="Side Dish">Side Dish</option>
+                            <option value="Snack">Snack</option>
+                            <option value="Beverages">Beverages</option>
+                            <option value="Sweets">Sweets</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="itemDescription">Description</label>
+                        <input type="text" id="itemDescription" name="description" placeholder="e.g., '2 pcs', '1 cup'">
+                    </div>
+                    <div class="form-group">
+                        <label for="itemPrice">Price (₹)</label>
+                        <input type="number" id="itemPrice" name="price" min="0" required>
+                    </div>
+                    <div class="nutrition-grid">
+                        <div class="form-group">
+                            <label for="itemCalories">Calories</label>
+                            <input type="number" id="itemCalories" name="calories" min="0">
+                        </div>
+                        <div class="form-group">
+                            <label for="itemCarbs">Carbs (g)</label>
+                            <input type="number" id="itemCarbs" name="carbs" min="0" step="0.1">
+                        </div>
+                        <div class="form-group">
+                            <label for="itemProtein">Protein (g)</label>
+                            <input type="number" id="itemProtein" name="protein" min="0" step="0.1">
+                        </div>
+                        <div class="form-group">
+                            <label for="itemFat">Fat (g)</label>
+                            <input type="number" id="itemFat" name="fat" min="0" step="0.1">
+                        </div>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" id="cancelModal" class="btn btn-outline">Cancel</button>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i> Save Item
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div id="toastContainer" class="toast-container"></div>
+
+    <!-- Scripts -->
+    <script src="./utils.js"></script>
+    <script src="./auth.js"></script>
+    <script src="./student.js"></script>
+    <script src="./admin.js"></script>
+    <script src="./app.js"></script>
+</body>
+</html>
